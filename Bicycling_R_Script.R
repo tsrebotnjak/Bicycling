@@ -20,6 +20,8 @@ table(data$GENDER) # 1=female, 2=male
 data1 <- data[data$GENDER !=3,]
 data1 <- data1[data1$GENDER !=4,]
 
+dim(data1)
+
 ## bike use analysis
 
 table(data1$BK_YR) # bike ridden in past year, 1=yes, 0=no
@@ -301,3 +303,142 @@ chisq.test(tabl)
 table(data1$POL_BAR_OTA) # 
 tabl <- table(data1$GENDER, data1$POL_BAR_OTA)
 chisq.test(tabl)
+
+#### Testing Paul's Findings on Gender Differences in Reasons for Bicycling
+#### and Gender Differences in Political Participation
+
+# Political Participation over Last 5 Years by Gender
+
+table(data1$POL_A) # Voted in natl. elections in last 5 years
+tabl <- table(data1$GENDER, data1$POL_A)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Voting in Natl. Elections", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_B) # Voted in local elections in last 5 years
+tabl <- table(data1$GENDER, data1$POL_B)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Voting in Local Elections", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_C) # Attending City Hall Meetings in last 5 years
+tabl <- table(data1$GENDER, data1$POL_C)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Attending City Hall Meetings", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# highly significant
+
+
+table(data1$POL_D) # Contacting Local Representative or Elected Official in last 5 years
+tabl <- table(data1$GENDER, data1$POL_D)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Contacting Local Rep or Elected Official", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_E) # Contacting Non-Elected City Official in last 5 years
+tabl <- table(data1$GENDER, data1$POL_E)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Contacting Non-Elected City Official", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# marginally significant
+
+
+table(data1$POL_F) # Signing Petition for Political Issues in last 5 years
+tabl <- table(data1$GENDER, data1$POL_F)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Signing Petition for Local Issues", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_G) # Donating Money to Orgs/Campaigns in last 5 years
+tabl <- table(data1$GENDER, data1$POL_G)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Donating Money to Orgs/Campaigns", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_H) # Volunteering Time for Orgs/Campaigns in last 5 years
+tabl <- table(data1$GENDER, data1$POL_H)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Volunteering Time for Orgs/Campaigns", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+
+table(data1$POL_OTA) # Other in last 5 years
+tabl <- table(data1$GENDER, data1$POL_OTA)
+tabl.prop <- sweep(tabl, 1, rowSums(tabl), FUN="/")
+barplot(tabl.prop[,2], main="Other", xlab="Female=1, Male=2")
+# testing for differences in proportions
+prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", conf.level=0.95, correct=T)
+# not significant
+
+### Gender Differences in Bicycling
+
+means <- matrix(NA, nrow=3, ncol=6)
+means <- as.data.frame(means)
+colnames(means) <- c("those who bike", "for work", "for school", "for rec/fitness", "errands", "other")
+rownames(means) <- c("women", "men")
+
+# among those who bike
+means[1,1] <- mean(data1$BKNUM[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,1] <- mean(data1$BKNUM[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM[data1$GENDER==2 & data1$BKNUM>0],
+          alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# highly significant
+
+# among those who bike, for work
+means[1,2] <- mean(data1$BKNUM_WRK[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,2] <- mean(data1$BKNUM_WRK[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM_WRK[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM_WRK[data1$GENDER==2 & data1$BKNUM>0],
+       alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# not significant
+
+# among those who bike, for school
+means[1,3] <- mean(data1$BKNUM_SC[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,3] <- mean(data1$BKNUM_SC[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM_SC[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM_SC[data1$GENDER==2 & data1$BKNUM>0],
+       alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# not significant
+
+# among those who bike, for recreation & fitness
+means[1,4] <- mean(data1$BKNUM_RF[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,4] <- mean(data1$BKNUM_RF[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM_RF[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM_RF[data1$GENDER==2 & data1$BKNUM>0],
+       alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# highly significant
+
+# among those who bike, for errands
+means[1,5] <- mean(data1$BKNUM_ER[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,5] <- mean(data1$BKNUM_ER[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM_ER[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM_ER[data1$GENDER==2 & data1$BKNUM>0],
+       alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# not significant
+
+# among those who bike, for other reasons
+means[1,6] <- mean(data1$BKNUM_OTA[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
+means[2,6] <- mean(data1$BKNUM_OTA[data1$GENDER==2 & data1$BKNUM>0], na.rm=T)
+t.test(x=data1$BKNUM_OTA[data1$GENDER==1 & data1$BKNUM>0], y=data1$BKNUM_OTA[data1$GENDER==2 & data1$BKNUM>0],
+       alternative="two.sided", paired=FALSE, var.equal=FALSE, conf.level=0.95)
+# not significant
+
+means <- round(means, 2)
+means[3,] <- c("sig", "not sig", "not sig", "sig", "not sig", "not sig")
+write.csv(means, "/Users/tsrebotnjak/Desktop/Bicycling/bike_means.csv")
+
