@@ -394,7 +394,7 @@ prop.test(x=c(tabl[1,2], tabl[2,2]), n=rowSums(tabl), alternative="two.sided", c
 means <- matrix(NA, nrow=3, ncol=6)
 means <- as.data.frame(means)
 colnames(means) <- c("those who bike", "for work", "for school", "for rec/fitness", "errands", "other")
-rownames(means) <- c("women", "men")
+rownames(means) <- c("women", "men", "t test")
 
 # among those who bike
 means[1,1] <- mean(data1$BKNUM[data1$GENDER==1 & data1$BKNUM>0], na.rm=T)
